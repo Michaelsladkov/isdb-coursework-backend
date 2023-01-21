@@ -1,9 +1,11 @@
 package com.msladkov.databasecoursework.models;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
 @Table(name = "SITE")
+@Data
 public class Site {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "site_id_seq_generator")

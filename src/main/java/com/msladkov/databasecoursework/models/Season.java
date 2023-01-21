@@ -1,10 +1,13 @@
 package com.msladkov.databasecoursework.models;
 
 import jakarta.persistence.*;
+import lombok.Data;
+
 import java.util.Date;
 
 @Entity
 @Table(name = "SEASON")
+@Data
 public class Season {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "season_id_seq_generator")

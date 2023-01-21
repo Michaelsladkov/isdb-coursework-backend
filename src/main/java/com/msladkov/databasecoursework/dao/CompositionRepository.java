@@ -9,7 +9,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CompositionRepository extends JpaRepository<Composition, Long> {
-    List<Composition> findCompositionByComposerName(String composerName);
+
+    List<Composition> findCompositionByComposerNameContaining(String composerNamePart);
 
     Optional<Composition> findById(long id);
 
