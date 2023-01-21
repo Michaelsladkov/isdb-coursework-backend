@@ -8,6 +8,7 @@ import com.msladkov.databasecoursework.models.Artist;
 import com.msladkov.databasecoursework.models.Composer;
 import com.msladkov.databasecoursework.models.Composition;
 import com.msladkov.databasecoursework.models.Play;
+import com.msladkov.databasecoursework.util.Convertation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -60,7 +61,7 @@ public class UnauthorizedActionsController {
     @GetMapping("/composition/{id}")
     public ResponseEntity<Composition> getCompositionById(@PathVariable("id") String idStr) {
         Optional<Composition> res;
-        Optional<Long> id = parseLong(idStr);
+        Optional<Long> id = Convertation.parseLong(idStr);
         if (id.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -136,7 +137,7 @@ public class UnauthorizedActionsController {
     @GetMapping("/play/{id}")
     public ResponseEntity<Play> getPlayById(@PathVariable("id") String idStr) {
         Optional<Play> res;
-        Optional<Long> id = parseLong(idStr);
+        Optional<Long> id = Convertation.parseLong(idStr);
         if (id.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -151,7 +152,7 @@ public class UnauthorizedActionsController {
     @GetMapping("/composer/{id}")
     public ResponseEntity<Composer> getComposerById(@PathVariable("id") String idStr) {
         Optional<Composer> res;
-        Optional<Long> id = parseLong(idStr);
+        Optional<Long> id = Convertation.parseLong(idStr);
         if (id.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -166,7 +167,7 @@ public class UnauthorizedActionsController {
     @GetMapping("/artist/{id}")
     public ResponseEntity<Artist> getArtistById(@PathVariable("id") String idStr) {
         Optional<Artist> res;
-        Optional<Long> id = parseLong(idStr);
+        Optional<Long> id = Convertation.parseLong(idStr);
         if (id.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -184,13 +185,5 @@ public class UnauthorizedActionsController {
             return ResponseEntity.ok(artistRepository.findAll());
         }
         return ResponseEntity.ok(artistRepository.findBySkillContaining(skill));
-    }
-
-    private static Optional<Long> parseLong(String s) {
-        try {
-            return Optional.of(Long.parseLong(s));
-        } catch (NumberFormatException e) {
-            return Optional.empty();
-        }
     }
 }
