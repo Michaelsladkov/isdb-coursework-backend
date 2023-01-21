@@ -1,5 +1,6 @@
 package com.msladkov.databasecoursework.models;
 
+import com.msladkov.databasecoursework.dto.SiteRepresentation;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -23,4 +24,18 @@ public class Site {
 
     @Column(name = "CAPACITY")
     private int capacity;
+
+    @ManyToOne
+    @JoinColumn(name = "MANAGER_ID")
+    private User manager;
+
+    protected Site(){}
+
+    public Site(SiteRepresentation siteRepresentation, User manager) {
+        this.name = siteRepresentation.getName();
+        this.address = siteRepresentation.getAddress();
+        this.type = siteRepresentation.getType();
+        this.capacity =  siteRepresentation.getCapacity();
+        this.manager = manager;
+    }
 }

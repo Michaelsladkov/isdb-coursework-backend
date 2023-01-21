@@ -1,5 +1,6 @@
 package com.msladkov.databasecoursework.models;
 
+import com.msladkov.databasecoursework.dto.SeasonRepresentation;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -22,4 +23,12 @@ public class Season {
 
     @Column(name = "NAME")
     private String name;
+
+    protected Season() {}
+
+    public Season(SeasonRepresentation representation) {
+        this.startDate = representation.getStartDate();
+        this.endDate = representation.getEndDate();
+        this.name = representation.getName();
+    }
 }

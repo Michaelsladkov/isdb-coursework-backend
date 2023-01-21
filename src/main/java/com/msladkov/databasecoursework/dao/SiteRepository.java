@@ -1,19 +1,19 @@
 package com.msladkov.databasecoursework.dao;
 
-import com.msladkov.databasecoursework.models.User;
+import com.msladkov.databasecoursework.models.Site;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface SiteRepository extends JpaRepository<Site, Long> {
 
-    Optional<User> findById(long id);
+    Optional<Site> findById(long id);
 
-    Optional<User> findByEmail(String email);
+    List<Site> findByAddressContaining(String addressPart);
 
-    List<User> findAll();
+    List<Site> findAll();
 
     @Transactional
     void deleteById(Long id);

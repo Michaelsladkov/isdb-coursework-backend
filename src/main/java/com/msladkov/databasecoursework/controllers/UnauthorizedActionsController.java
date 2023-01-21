@@ -1,13 +1,7 @@
 package com.msladkov.databasecoursework.controllers;
 
-import com.msladkov.databasecoursework.dao.ArtistRepository;
-import com.msladkov.databasecoursework.dao.ComposerRepository;
-import com.msladkov.databasecoursework.dao.CompositionRepository;
-import com.msladkov.databasecoursework.dao.PlayRepository;
-import com.msladkov.databasecoursework.models.Artist;
-import com.msladkov.databasecoursework.models.Composer;
-import com.msladkov.databasecoursework.models.Composition;
-import com.msladkov.databasecoursework.models.Play;
+import com.msladkov.databasecoursework.dao.*;
+import com.msladkov.databasecoursework.models.*;
 import com.msladkov.databasecoursework.util.Convertation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +17,7 @@ public class UnauthorizedActionsController {
     private PlayRepository playRepository;
     private ComposerRepository composerRepository;
     private ArtistRepository artistRepository;
+    private SiteRepository siteRepository;
 
     @Autowired
     public void setCompositionRepository(CompositionRepository compositionRepository) {
@@ -42,6 +37,10 @@ public class UnauthorizedActionsController {
     @Autowired
     public void setArtistRepository(ArtistRepository artistRepository) {
         this.artistRepository = artistRepository;
+    }
+
+    public void setSiteRepository(SiteRepository siteRepository) {
+        this.siteRepository = siteRepository;
     }
 
     @CrossOrigin
@@ -185,5 +184,29 @@ public class UnauthorizedActionsController {
             return ResponseEntity.ok(artistRepository.findAll());
         }
         return ResponseEntity.ok(artistRepository.findBySkillContaining(skill));
+    }
+
+    @CrossOrigin
+    @GetMapping("/sites")
+    public ResponseEntity<List<Site>> getSites(@RequestParam(name = "address", defaultValue = "") String address) {
+        if (address.isEmpty()) {
+            return ResponseEntity.ok(siteRepository.findAll());
+        }
+        return ResponseEntity.ok(siteRepository.findByAddressContaining(address));
+    }
+
+    @CrossOrigin
+    @GetMapping("/site/{id}")
+    public ResponseEntity<Site> getSiteById(@PathVariable("id") String idStr) {
+        Optional<Site> res;
+        Optional<Long> id = Convertation.parseLong(idStr);
+        if (id.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        res = siteRepository.findById(id.get());
+        if (res.isPresent()) {
+            return new ResponseEntity<>(res.get(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }
