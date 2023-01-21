@@ -1,7 +1,11 @@
 package com.msladkov.databasecoursework.controllers;
 
+import com.msladkov.databasecoursework.dao.ArtistRepository;
+import com.msladkov.databasecoursework.dao.ComposerRepository;
 import com.msladkov.databasecoursework.dao.CompositionRepository;
 import com.msladkov.databasecoursework.dao.PlayRepository;
+import com.msladkov.databasecoursework.models.Artist;
+import com.msladkov.databasecoursework.models.Composer;
 import com.msladkov.databasecoursework.models.Composition;
 import com.msladkov.databasecoursework.models.Play;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +20,8 @@ import java.util.stream.Collectors;
 public class UnauthorizedActionsController {
     private CompositionRepository compositionRepository;
     private PlayRepository playRepository;
+    private ComposerRepository composerRepository;
+    private ArtistRepository artistRepository;
 
     @Autowired
     public void setCompositionRepository(CompositionRepository compositionRepository) {
@@ -25,6 +31,16 @@ public class UnauthorizedActionsController {
     @Autowired
     public void setPlayRepository(PlayRepository playRepository) {
         this.playRepository = playRepository;
+    }
+
+    @Autowired
+    public void setComposerRepository(ComposerRepository composerRepository) {
+        this.composerRepository = composerRepository;
+    }
+
+    @Autowired
+    public void setArtistRepository(ArtistRepository artistRepository) {
+        this.artistRepository = artistRepository;
     }
 
     @CrossOrigin
@@ -44,12 +60,11 @@ public class UnauthorizedActionsController {
     @GetMapping("/composition/{id}")
     public ResponseEntity<Composition> getCompositionById(@PathVariable("id") String idStr) {
         Optional<Composition> res;
-        try {
-            long id = Long.parseLong(idStr);
-            res = compositionRepository.findById(id);
-        } catch (NumberFormatException e) {
+        Optional<Long> id = parseLong(idStr);
+        if (id.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        res = compositionRepository.findById(id.get());
         if (res.isPresent()) {
             return new ResponseEntity<>(res.get(), HttpStatus.OK);
         }
@@ -121,15 +136,61 @@ public class UnauthorizedActionsController {
     @GetMapping("/play/{id}")
     public ResponseEntity<Play> getPlayById(@PathVariable("id") String idStr) {
         Optional<Play> res;
-        try {
-            long id = Long.parseLong(idStr);
-            res = playRepository.findById(id);
-        } catch (NumberFormatException e) {
+        Optional<Long> id = parseLong(idStr);
+        if (id.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        res = playRepository.findById(id.get());
         if (res.isPresent()) {
             return new ResponseEntity<>(res.get(), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @CrossOrigin
+    @GetMapping("/composer/{id}")
+    public ResponseEntity<Composer> getComposerById(@PathVariable("id") String idStr) {
+        Optional<Composer> res;
+        Optional<Long> id = parseLong(idStr);
+        if (id.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        res = composerRepository.findById(id.get());
+        if (res.isPresent()) {
+            return new ResponseEntity<>(res.get(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @CrossOrigin
+    @GetMapping("/artist/{id}")
+    public ResponseEntity<Artist> getArtistById(@PathVariable("id") String idStr) {
+        Optional<Artist> res;
+        Optional<Long> id = parseLong(idStr);
+        if (id.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        res = artistRepository.findById(id.get());
+        if (res.isPresent()) {
+            return new ResponseEntity<>(res.get(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @CrossOrigin
+    @GetMapping("/artists")
+    public ResponseEntity<List<Artist>> getArtists(@RequestParam(name = "skill", defaultValue = "") String skill) {
+        if (skill.isEmpty()) {
+            return ResponseEntity.ok(artistRepository.findAll());
+        }
+        return ResponseEntity.ok(artistRepository.findBySkillContaining(skill));
+    }
+
+    private static Optional<Long> parseLong(String s) {
+        try {
+            return Optional.of(Long.parseLong(s));
+        } catch (NumberFormatException e) {
+            return Optional.empty();
+        }
     }
 }
