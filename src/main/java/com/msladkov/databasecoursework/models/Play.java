@@ -1,5 +1,6 @@
 package com.msladkov.databasecoursework.models;
 
+import com.msladkov.databasecoursework.dto.PlayRepresentation;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -50,5 +51,16 @@ public class Play implements Comparable<Play> {
     @Override
     public int hashCode() {
         return id.intValue();
+    }
+
+    protected Play() {}
+
+    public Play(PlayRepresentation playRepresentation, Season season, Composition composition, Site site) {
+        this.name = playRepresentation.getName();
+        this.site = site;
+        this.date = playRepresentation.getDateTime();
+        this.description = playRepresentation.getDescription();
+        this.composition = composition;
+        this.season = season;
     }
 }

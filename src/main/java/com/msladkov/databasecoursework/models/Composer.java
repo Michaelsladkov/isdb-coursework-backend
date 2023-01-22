@@ -1,5 +1,6 @@
 package com.msladkov.databasecoursework.models;
 
+import com.msladkov.databasecoursework.dto.ComposerRepresentation;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -25,4 +26,13 @@ public class Composer {
 
     @Column(name = "BIOGRAPHY")
     private String biography;
+
+    protected Composer() {}
+
+    public Composer(ComposerRepresentation representation) {
+        this.name = representation.getName();
+        this.birthDate = representation.getBirthDate();
+        this.deathDate = representation.getDeathDate();
+        this.biography = representation.getBiography();
+    }
 }

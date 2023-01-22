@@ -1,5 +1,6 @@
 package com.msladkov.databasecoursework.models;
 
+import com.msladkov.databasecoursework.dto.CompositionRepresentation;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -41,4 +42,19 @@ public class Composition {
                joinColumns = @JoinColumn(name = "composition_id"),
                inverseJoinColumns = @JoinColumn(name = "topic_id"))
     private List<Topic> topics;
+
+    protected Composition() {}
+
+    public Composition(CompositionRepresentation representation,
+                       List<Topic> topics,
+                       Language language,
+                       Composer composer,
+                       Genre genre) {
+        this.name = representation.getName();
+        this.topics = topics;
+        this.composer = composer;
+        this.creationDate = representation.getCreationDate();
+        this.language = language;
+        this.genre = genre;
+    }
 }

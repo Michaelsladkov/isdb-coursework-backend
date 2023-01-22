@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @RestController
 public class UnauthorizedActionsController {
@@ -18,6 +17,9 @@ public class UnauthorizedActionsController {
     private ComposerRepository composerRepository;
     private ArtistRepository artistRepository;
     private SiteRepository siteRepository;
+    private TopicRepository topicRepository;
+    private GenreRepository genreRepository;
+    private LanguageRepository languageRepository;
 
     @Autowired
     public void setCompositionRepository(CompositionRepository compositionRepository) {
@@ -35,12 +37,28 @@ public class UnauthorizedActionsController {
     }
 
     @Autowired
+    public void setGenreRepository(GenreRepository genreRepository) {
+        this.genreRepository = genreRepository;
+    }
+
+    @Autowired
+    public void setLanguageRepository(LanguageRepository languageRepository) {
+        this.languageRepository = languageRepository;
+    }
+
+    @Autowired
     public void setArtistRepository(ArtistRepository artistRepository) {
         this.artistRepository = artistRepository;
     }
 
+    @Autowired
     public void setSiteRepository(SiteRepository siteRepository) {
         this.siteRepository = siteRepository;
+    }
+
+    @Autowired
+    public void setTopicRepository(TopicRepository topicRepository) {
+        this.topicRepository = topicRepository;
     }
 
     @CrossOrigin
@@ -109,7 +127,7 @@ public class UnauthorizedActionsController {
         if (!artist.isEmpty()) {
             resultByArtist = new HashSet<>(playRepository.findPlayByArtistsNameContaining(artist));
         }
-        Set<Play> resultOverSets[] = new Set[]{
+        Set<Play>[] resultOverSets = new Set[]{
                 resultByAddress,
                 resultByComposer,
                 resultByComposition,
@@ -117,7 +135,7 @@ public class UnauthorizedActionsController {
                 resultByArtist
         };
         Set<Play> result = new HashSet<>();
-        for (Set s : resultOverSets) {
+        for (Set<Play> s : resultOverSets) {
             if (s != null) {
                 result = s;
                 break;
@@ -208,5 +226,23 @@ public class UnauthorizedActionsController {
             return new ResponseEntity<>(res.get(), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @CrossOrigin
+    @GetMapping("/topics")
+    public ResponseEntity<List<Topic>> getTopics() {
+        return ResponseEntity.ok().body(topicRepository.findAll());
+    }
+
+    @CrossOrigin
+    @GetMapping("/languages")
+    public ResponseEntity<List<Language>> getLanguages() {
+        return ResponseEntity.ok().body(languageRepository.findAll());
+    }
+
+    @CrossOrigin
+    @GetMapping("/genres")
+    public ResponseEntity<List<Genre>> getGenres() {
+        return ResponseEntity.ok().body(genreRepository.findAll());
     }
 }
