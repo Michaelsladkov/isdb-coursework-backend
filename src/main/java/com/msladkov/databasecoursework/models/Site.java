@@ -29,6 +29,9 @@ public class Site {
     @JoinColumn(name = "MANAGER_ID")
     private User manager;
 
+    @Column(name = "INTEREST_THRESHOLD")
+    private Integer interestThreshold;
+
     protected Site(){}
 
     public Site(SiteRepresentation siteRepresentation, User manager) {
@@ -37,5 +40,6 @@ public class Site {
         this.type = siteRepresentation.getType();
         this.capacity =  siteRepresentation.getCapacity();
         this.manager = manager;
+        this.interestThreshold = siteRepresentation.getInterestThreshold();
     }
 }

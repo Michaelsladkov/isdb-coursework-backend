@@ -181,6 +181,12 @@ public class UnauthorizedActionsController {
     }
 
     @CrossOrigin
+    @GetMapping("/composers")
+    public ResponseEntity<List<Composer>> getComposers() {
+        return ResponseEntity.ok(composerRepository.findAll());
+    }
+
+    @CrossOrigin
     @GetMapping("/artist/{id}")
     public ResponseEntity<Artist> getArtistById(@PathVariable("id") String idStr) {
         Optional<Artist> res;

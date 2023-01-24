@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table(name = "GENRE")
+@Table(name = "LANGUAGE")
 @Data
 public class Language {
     @Id

@@ -2,6 +2,7 @@ package com.msladkov.databasecoursework.service;
 
 import com.msladkov.databasecoursework.dao.UserRepository;
 import com.msladkov.databasecoursework.dto.NewUserData;
+import com.msladkov.databasecoursework.dto.UserLoginData;
 import com.msladkov.databasecoursework.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,12 +41,16 @@ public class AuthenticationService {
         return existingUser.isPresent();
     }
 
+    public boolean authUser(UserLoginData loginData) {
+        return authUser(loginData.getEmail(), loginData.getPassword());
+    }
+
     public boolean authUser(String email, String password) {
         String passwordHash = new String(digest.digest(password.getBytes(StandardCharsets.UTF_8)));
         Optional<User> user = userRepository.findByEmail(email);
         if (user.isEmpty()) {
             return false;
         }
-        return user.get().getPasswordHash().equals(passwordHash);
+        return user.get().obtainPasswordHash().equals(passwordHash);
     }
 }

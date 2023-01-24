@@ -21,4 +21,13 @@ public class Wishes {
 
     @Column(name = "ADDED")
     private LocalDateTime addedDate;
+
+    protected Wishes() {}
+
+    public Wishes(User user, Composition composition) {
+        this.user = user;
+        this.composition = composition;
+        this.addedDate = LocalDateTime.now();
+        this.id = new UserWishKey(user.getId(), composition.getId());
+    }
 }

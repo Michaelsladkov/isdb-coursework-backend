@@ -2,8 +2,6 @@ package com.msladkov.databasecoursework.models;
 
 import jakarta.persistence.*;
 
-import javax.persistence.EmbeddedId;
-
 @Entity
 @Table(name = "HISTORY")
 public class History {

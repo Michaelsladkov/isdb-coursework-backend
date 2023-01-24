@@ -37,6 +37,9 @@ public class Play implements Comparable<Play> {
     @Column(name = "DESCRIPTION")
     private String description;
 
+    @Column(name = "DURATION")
+    private Long duration;
+
     @ManyToMany
     @JoinTable(name = "PLAY_ARTIST",
                joinColumns = @JoinColumn(name = "play_id"),
@@ -62,5 +65,6 @@ public class Play implements Comparable<Play> {
         this.description = playRepresentation.getDescription();
         this.composition = composition;
         this.season = season;
+        this.duration = playRepresentation.getDuration();
     }
 }

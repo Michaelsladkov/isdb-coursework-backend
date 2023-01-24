@@ -12,4 +12,5 @@ public class PlayRepresentation {
     private LocalDateTime dateTime;
     private Long seasonId;
     private String description;
+    private Long duration;
 }

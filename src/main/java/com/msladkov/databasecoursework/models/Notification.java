@@ -1,6 +1,7 @@
 package com.msladkov.databasecoursework.models;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 
@@ -10,7 +11,7 @@ public class Notification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "notification_seq_generator")
-    @SequenceGenerator(name = "notification_seq_generator", sequenceName = "NOTIFICATION_ID_SEQ")
+    @SequenceGenerator(name = "notification_seq_generator", sequenceName = "NOTIFICATION_ID_SEQ", allocationSize = 1)
     private Long id;
 
     @Column(name = "IS_SHOWN")
@@ -18,16 +19,16 @@ public class Notification {
 
     @Column(name = "TYPE")
     @Enumerated(EnumType.STRING)
+    @Getter
     private NotificationType type;
 
     @Column(name = "CREATION_DATE")
     private LocalDateTime creationDate;
 
-    @ManyToOne
-    @JoinColumn(name = "USER_ID")
-    private User targetUser;
+    @Column(name = "USER_ID")
+    private Long targetUser;
 
-    @ManyToOne
-    @JoinColumn(name = "PLAY_ID")
-    private Play play;
+    @Column(name = "PLAY_ID")
+    @Getter
+    private Long play;
 }
